@@ -22,6 +22,14 @@
 (define-test bigger-word-2
   (assert-equal 22 (scrabble-score:score-word "quirky")))
 
+(define-test mixed-case
+  (assert-equal 14
+		(scrabble-score:score-word "CaBbAgE")
+		(scrabble-score:score-word "cAbBaGe")))
+
+(define-test one-pointers
+  (assert-equal 10 (scrabble-score:score-word "AEIOULNRST")))
+
 (define-test all-upper-case-word
   (assert-equal 20 (scrabble-score:score-word "MULTIBILLIONAIRE")))
 
