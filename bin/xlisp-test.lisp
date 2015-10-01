@@ -59,8 +59,8 @@ http://exercism.io"))
 (defun load-package (filename)
   "Load file expecting a single package to be loaded. Errors."
   (let ((packages-before (list-all-packages))
-        (*print-circle* t)) ; https://github.com/exercism/xlisp/issues/77
-    (load filename :verbose (verbosity-p +info+) :print (verbosity-p +info+))
+        (*print-circle* (verbosity-p +debug+))) ; https://github.com/exercism/xlisp/issues/77 
+    (load filename :verbose (verbosity-p +info+) :print (verbosity-p +debug+))
     (let ((loaded (set-difference (list-all-packages) packages-before)))
       (typecase (length loaded)
         ((integer 0 0) (error "No packages loaded."))
