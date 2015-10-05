@@ -1,0 +1,107 @@
+Pythagorean Triplets
+********************
+
+Documentation adapted from:
+
+xpython/pythagorean-triplet/pythagorean_triplet_test.py
+
+
+primitive-triplets (Function)
+=============================
+
+Syntax:
+.......
+
+ -- Function: primitive-triplets n -> result-list
+
+Arguments and Values:
+.....................
+
+N--a non-negative integer multiple of 4 (see explanantion below).
+
+RESULT-LIST--a sorted list of sorted lists.
+
+Description:
+............
+
+`primitive-triplets' returns a LIST of all primitive Pythagorean
+triplets having N as a component. The components other than the
+argument can be quite large.
+
+A primitive Pythagorean triplet has its 3 components coprime. So,
+{3,4,5} a primitive Pythagorean triplet since 3,4 and 5 don't have a
+common factor.  On the other hand, {6,8,10}, although a Pythagorean
+triplet, is not primitive since 2 divides all three components.
+
+A method for finding all primitive Pythagorean triplet is given in
+Wikipedia:
+
+http://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple
+
+The triplet a=(m^2-n^2), b=2*m*n and c=(m^2+n^2), where m and n are
+coprime and m-n>0 is odd, generate a primitive triplet. Note that this
+implies that b has to be divisible by 4 and a and c are odd. Also note
+that we may have either a>b or b>a.
+
+The function `primitive-triplets' should then use the formula above
+with b set to its argument and find all possible pairs {m,n} such that
+m>n, m-n is odd, b=2*m*n and m and n are coprime.
+
+Exceptional Situations:
+.......................
+
+Might signal an error of type `type-error' if any arguments are not an
+non-negative integer.
+
+Might also signal `arithmetic-error'.
+
+
+triplets-in-range (Function)
+============================
+
+Syntax:
+.......
+
+ -- Function: triplets-in-range min max -> result-list
+
+Arguments and Values:
+.....................
+
+MIN, MAX--non-negative integers.
+
+RESULT-LIST--a sorted list of sorted lists.
+
+Description:
+............
+
+`triplets-in-range' returns a LIST of all Pythagorean triplets {a,b,c}
+with MIN <= a,b,c <= MAX.
+
+Exceptional Situations:
+.......................
+
+Might signal an error of type `type-error' if any arguments are not an
+non-negative integer.
+
+Might also signal `arithmetic-error'.
+
+
+pythagorean-p (Function)
+========================
+
+Syntax:
+.......
+
+ -- Function: pythagorean-p sequence -> generalized boolean
+
+Arguments and Values:
+.....................
+
+SEQUENCE--a proper sequence.
+
+GENERALIZED-BOOLEAN--a generalized boolean.
+
+
+Documentation adapted from:
+
+xpython/pythagorean-triplet/pythagorean_triplet_test.py

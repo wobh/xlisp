@@ -1,0 +1,283 @@
+#+TITLE: Pythagorean Triples
+#+DATE: <2015-10-23 Fri>
+#+AUTHOR: William Clifford
+#+EMAIL: wobh@yahoo.com
+
+* The Pythagorean Theorem
+
+Given: a triangle
+  - with angles:
+    - ∠L :: a "right" angle; size ∠L = 𝜋/2
+    - ∠O :: an "origin" angle (also called ∠𝜃); size 0 < ∠O < 2𝜋
+  - with sides:
+    - a :: the length of the side adjacent to ∠O
+    - b :: the length of the side opposite to ∠O
+    - c :: the length of the hypotenuse (side opposite ∠L)
+  - when 
+: c^2 = a^2 + b^2
+
+Proof:
+
+#+BEGIN_EXAMPLE
+        5
+       5 5 
+      5 5 5
+     5 5 5 5
+    5 5 5 5 5
+4444 5 5 5 5
+4444  5 5 5
+4444   5 5
+4444    5
+    333
+    333
+    333
+#+END_EXAMPLE
+
+* Pythagorean triples
+
+A right triangle whose hypotenuse is rational must have side lengths
+with certain properties.
+
+* Euclidean formula
+
+#+BEGIN_SRC lisp
+  (defun make-triplet-euclid (m n &optional (k 1))
+    "Return Pythagoran triple given RATIONAL values for M, N, and K.
+
+  For primitive triple, use coprime values for M and N."
+    (declare (type rational m n k))
+    (flet ((nn-mm (m n) (* k (- (* n n) (* m m))))
+           (2*m*n (m n) (* k (* 2 m n)))
+           (mm+nn (m n) (* k (+ (* m m) (* n n)))))
+      (list (nn-mm m n) (2*m*n m n) (mm+nn m n))))
+
+  (defun coprime-p (m n)
+    "Return T if M and N are coprime."
+    (= 1 (gcd m n)))
+
+  (defun triple-p (a b c)
+    "Return c^2 if c^2 = a^2 + b^2."
+    (let ((c^2 (* c c)))
+      (when (= c^2 (+ (* a a) (* b b)))
+        c^2)))
+
+  (defun primitive-triple-p (a b c)
+    "Return T if if triple is primitive."
+    (and (triple-p a b c) (= 1 (gcd a b c)))
+#+END_SRC
+
+: a = 3 = n^2 - m^2 = 2^2 - 1^2
+: b = 4 = 2 * m * n = 2 * 2 * 1
+: c = 5 = m^2 + n^2 = 1^2 + 2^2
+
+: (mm + nn)^2 = (nn - mm)^2 + (2mn)^2
+
+* Tree of triples
+
+: T1 := :  A =  a - 2b + 2c :  B =  2a - b + 2c :  C =  2a - 2b + 3c
+: T2 := :  A =  a + 2b + 2c :  B =  2a + b + 2c :  C =  2a + 2b + 3c
+: T3 := :  A = -a + 2b + 2c :  B = -2a + b + 2c :  C = -2a + 2b + 3c
+
+#+BEGIN_SRC lisp
+  (defun triple-p (a b c)
+    (= (* c c) (+ (* a a) (* b b))))
+
+  (defun triple-triples (a b c)
+    (labels ((t1 (a b c)
+               (list (+ a   (- 0 b b) c c)
+                     (+ a a (- 0 b)   c c)
+                     (+ a a (- 0 b b) c c c)))
+             (t2 (a b c)
+               (list (+ a   b b c c)
+                     (+ a a b   c c)
+                     (+ a a b b c c c)))
+             (t3 (a b c)
+               (list (+ (- 0 a)   b b c c)
+                     (+ (- 0 a a) b   c c)
+                     (+ (- 0 a a) b b c c c))))
+      (list (t1 a b c) (t2 a b c) (t3 a b c))))
+
+  (triple-triples 3 4 5)
+#+END_SRC
+* Project Euler: Problem 9: Special Pythagorean triplet
+- https://projecteuler.net/problem=9
+
+A Pythagorean triplet is a set of three natural numbers, ~a < b < c~, for which,
+~a^2 + b^2 = c^2~
+
+For example, ~3^2 + 4^2 = 5^2 == 9 + 16 = 25~.
+
+There exists exactly one Pythagorean triplet for which ~a + b + c = 1000~.
+Find the product ~abc~.
+
+: when:
+ : cc = aa + bb
+: then:
+ : cc - aa = bb
+ : (c - a)(c + a) = bb
+ : (c + a)/b = (c - a)/b
+
+: when
+ : 0 = aa + bb - cc
+
+: when
+ : p = a + b + c
+ : a = p - c - b
+ : b = p - c - a
+ : c = p - a - b
+: then
+ : p = (p - c - b) + b + c
+ : p = a + (p - c - a) + c
+ : p = a + b + (p - a - b)
+
+: when
+ : s = p/2 = (a + b + c)/2
+: then
+ : s(s - c) = (s - a)(s - b) 
+ :  ss - sc = ss - sa - sb + ab
+ :    s - c = s - a - b + ab/s
+
+
+: 1000 = a + b + c
+:    0 = aa + bb - cc
+
+: 1000 = a + b + c + (aa + bb - cc)
+
+:          500 = (a + b + c)/2
+: 500^2 - 500c = (500 - a)(500 - b)
+
+: 500^2 - 500c = 500^2 + -500b + -500a + ab
+: 500(500 - c) = 500^2 + -500b + -500a + ab
+:      500 - c = 500 - b - a + (ab/500)
+
+
+:  1000 = nn - mm + 2mn + mm + nn
+:  1000 = nn + nn - mm + mm + 2mn
+:  1000 = 2nn + 2mn
+:   500 = nn + mn
+:   500 = n(n + m)
+: 500/n = n + m
+
+: 500/n - n = m
+
+:  500 = nn + n(500/n - n)
+:  500 = nn + (500 - nn)
+
+: s = p/2
+: p = nn - mm + 2mn + mm + nn
+: p = 2nn + 2mn
+: s = nn + mn
+: p/n = 2n + 2m
+: sn = n + m
+: sn - n = m
+
+: p = 2nn + 2np/2n
+
+: p = 2nn + 2nm
+: p = 2n(n + m)
+
+:  = nn + nm
+:
+
+** Euclid's method
+: when
+ : 0 = aa + bb - cc
+ : m < n in Q
+ : k in Q
+: then
+ : a = k(nn - mm)
+ : b = k(2mn)
+ : c = k(mm + nn)
+
+: when
+ : k = 1
+: then:
+ : (mm + nn)(mm + nn) = (nn - mm)(nn - mm) + 2mmnn
+ : mmmm + 2mmnn + nnnn = nnnn - 2mmnn + mmmm + 4mmnn
+
+** Dickson's method
+: when
+ : 0 = aa + bb - cc
+ : rr = 2st
+: then
+ : a = r + s
+ : b = r + t
+ : c = r + s + t
+
+* Space
+- displacement
+
+- coordinate
+
+- magnitude
+- direction
+
+- position
+- interval
+
+- scalar
+- vector
+- matrix
+- tensor
+
+- array
+- tuple
+- space
+- field
+
+- basis
+- bases
+
+* Cosines
+
+: Given: 
+
+* Law of Cosines
+
+: Given: ∠A, ∠B, ∠C
+:   And: a = BC, b = AC, c = AB
+:  When: d ⟂ c = a * sin(C)
+:  Then: c^2 = a^2 + b^2 - 2ab * cos(C)
+
+* dot product
+  
+  The dot product of two vectors is the sum of the product of each of
+the components of two vectors.
+
+: Given: A = (a_1, a_2, ... a_n)
+:   And: B = (b_1, b_2, ... b_n)
+:   And: n = |A| = |B|
+:   And: {i | 1, 2, ... n}
+:   And: A⋅B = 𝚺 (∀i | A_i * B_i)
+:  When: A⋅A = 𝚺 (∀i | A_i * A_i)
+:  Then: A⋅A = |A|^2
+
+- commutative
+: A⋅B = B⋅A
+
+- distributive with vector addition
+: A⋅(B+C) = A⋅B + A⋅C
+
+- associative with scalar multiplication (bilinear?)
+: t(A⋅B) = (tA)⋅B = A⋅(tB)
+
+** Cosine
+: Given: A = (a_1, a_2, ... a_n)
+:   And: B = (b_1, b_2, ... b_n)
+:   And: n = |A| = |B|
+:   And: C = A - B
+:   And: 𝜃 = 
+:  Then: A⋅B = |A||B|cos𝜃
+** References
+- http://mathproofs.blogspot.com
+
+* COMMENT org settings
+
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 8.3.2)
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
