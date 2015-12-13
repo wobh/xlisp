@@ -18,7 +18,8 @@ matrix:
   - LISP=abcl
 
 install:
-- curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
+- curl -L https://github.com/wobh/xlisp/lib/travis/raw/xlisp-93-test-travis-install-script/install.sh | sh
+#- curl -L https://github.com/exercism/xlisp/lib/travis/raw/master/install.sh | sh
 
 script:
 - bin/fetch-configlet
