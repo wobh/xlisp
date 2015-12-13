@@ -1,6 +1,18 @@
 *.swp
-*.beam
+*.beam # ???
 .DS_Store
 tmp
 bin/configlet
 bin/configlet.exe
+
+# Emacs temps
+*~
+\#*#
+.\#*
+
+# Common Lisp
+*.fas
+*.fasl
+*.FAS
+*.FASL
+*.lisp-temp
