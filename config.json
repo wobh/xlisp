@@ -37,7 +37,8 @@
 
   ],
   "ignored": [
-    "docs"
+    "docs",
+    "lib"
   ],
   "foregone": [
       "accumulate",
