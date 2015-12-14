@@ -30,8 +30,8 @@ unpack() {
 
 install_i386_arch() {
     # Travis-CI's dpkg doesn't seem to know about --add-architecture.
-    #sudo dpkg --add-architecture i386
-    sudo apt-get install libc6:i386
+    #dpkg --add-architecture i386
+    apt-get install libc6:i386
 }
 
 # add_to_lisp_rc <string>
@@ -95,7 +95,7 @@ install_script() {
     done
     chmod 755 "$tmp"
 
-    sudo mv "$tmp" "$path"
+    mv "$tmp" "$path"
 }
 
 ABCL_TARBALL_URL1="http://www.abcl.org/releases/1.2.1/abcl-bin-1.2.1.tar.gz"
@@ -105,7 +105,7 @@ ABCL_DIR="$HOME/abcl"
 ABCL_SCRIPT="/usr/local/bin/abcl"
 
 install_abcl() {
-    sudo apt-get install default-jre
+    apt-get install default-jre
     get "$ABCL_TARBALL" "$ABCL_TARBALL_URL1" "$ABCL_TARBALL_URL2"
     unpack -z "$ABCL_TARBALL" "$ABCL_DIR"
 
@@ -126,7 +126,7 @@ install_sbcl() {
     echo "Installing SBCL..."
     get "$SBCL_TARBALL" "$SBCL_TARBALL_URL1" "$SBCL_TARBALL_URL2" "$SBCL_TARBALL_URL3"
     unpack -j "$SBCL_TARBALL" "$SBCL_DIR"
-    ( cd "$SBCL_DIR" && sudo bash install.sh )
+    ( cd "$SBCL_DIR" && bash install.sh )
 
     cim use sbcl-system --default
 }
@@ -142,8 +142,8 @@ install_sbcl32() {
 
     get "$SBCL32_TARBALL" "$SBCL32_TARBALL_URL1" "$SBCL32_TARBALL_URL2"
     unpack -j "$SBCL32_TARBALL" "$SBCL32_DIR"
-    ( cd "$SBCL32_DIR" && sudo bash install.sh )
-    sudo ln -s /usr/local/bin/sbcl /usr/local/bin/sbcl32
+    ( cd "$SBCL32_DIR" && bash install.sh )
+    ln -s /usr/local/bin/sbcl /usr/local/bin/sbcl32
 
     cim use sbcl-system --default
 }
@@ -209,7 +209,7 @@ ECL_TARBALL="ecl.tar.gz"
 install_ecl() {
     echo "Installing ECL..."
     get "$ECL_TARBALL" "$ECL_TARBALL_URL1" "$ECL_TARBALL_URL2"
-    sudo tar -C / -xzf "$ECL_TARBALL"
+    tar -C / -xzf "$ECL_TARBALL"
 
     cim use ecl-system --default
 }
@@ -217,13 +217,13 @@ install_ecl() {
 install_clisp() {
     if [ "$LISP" = "clisp32" ]; then
         echo "Installing 32-bit CLISP..."
-        sudo apt-get remove libsigsegv2
-        sudo apt-get install libsigsegv2:i386
-        sudo apt-get install clisp:i386
-        sudo ln -s /usr/bin/clisp /usr/local/bin/clisp32
+        apt-get remove libsigsegv2
+        apt-get install libsigsegv2:i386
+        apt-get install clisp:i386
+        ln -s /usr/bin/clisp /usr/local/bin/clisp32
     else
         echo "Installing CLISP..."
-        sudo apt-get install clisp
+        apt-get install clisp
     fi
     cim use clisp-system --default
 }
@@ -243,8 +243,8 @@ install_acl() {
 
     cim install "$acl"
 
-    sudo ln -vs "$HOME/.cim/bin/$acl" "/usr/local/bin/$acl"
-    sudo ln -vs "$HOME/.cim/bin/$acl" "/usr/local/bin/$LISP"
+    ln -vs "$HOME/.cim/bin/$acl" "/usr/local/bin/$acl"
+    ln -vs "$HOME/.cim/bin/$acl" "/usr/local/bin/$LISP"
 
     # XXX: cim doesn't support mlisp
     cim use "$acl" --default
@@ -277,7 +277,7 @@ install_cim() {
 (
     cd "$HOME"
 
-    sudo apt-get update
+    apt-get update
     install_cim
     install_asdf
 
