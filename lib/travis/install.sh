@@ -253,13 +253,30 @@ install_acl() {
 QUICKLISP_URL="http://beta.quicklisp.org/quicklisp.lisp"
 
 install_quicklisp() {
-    get quicklisp.lisp "$QUICKLISP_URL"
-    echo 'Installing Quicklisp...'
-    cl -f quicklisp.lisp -e '(quicklisp-quickstart:install)'
+    # get quicklisp.lisp "$QUICKLISP_URL"
+    # echo 'Installing Quicklisp...'
+    # cl -f quicklisp.lisp -e '(quicklisp-quickstart:install)'
     add_to_lisp_rc '(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
                                                            (user-homedir-pathname))))
                       (when (probe-file quicklisp-init)
                         (load quicklisp-init)))'
+}
+
+install_lisp() {
+    case "$LISP" in
+        abcl) install_abcl ;;
+        allegro|allegromodern) install_acl ;;
+        sbcl) install_sbcl ;;
+        sbcl32) install_sbcl32 ;;
+        ccl|ccl32) install_ccl ;;
+        cmucl) install_cmucl; exit 0 ;; # no CIM support
+        clisp|clisp32) install_clisp ;;
+        ecl) install_ecl ;;
+        *)
+            echo "Unrecognised lisp: '$LISP'"
+            exit 1
+            ;;
+    esac
 }
 
 CL_SCRIPT="/usr/local/bin/cl"
@@ -277,26 +294,12 @@ install_cim() {
 (
     cd "$HOME"
 
-    sudo apt-get update
-    install_cim
-    install_asdf
+    # sudo apt-get update
+    # install_cim
+    # install_asdf
+    install_lisp
 
-    case "$LISP" in
-        abcl) install_abcl ;;
-        allegro|allegromodern) install_acl ;;
-        sbcl) install_sbcl ;;
-        sbcl32) install_sbcl32 ;;
-        ccl|ccl32) install_ccl ;;
-        cmucl) install_cmucl; exit 0 ;; # no CIM support
-        clisp|clisp32) install_clisp ;;
-        ecl) install_ecl ;;
-        *)
-            echo "Unrecognised lisp: '$LISP'"
-            exit 1
-            ;;
-    esac
-
-    compile_asdf
+    # compile_asdf
 
     cl -e '(format t "~%~a ~a up and running! (ASDF ~a)~%~%"
                    (lisp-implementation-type)
@@ -304,5 +307,5 @@ install_cim() {
                    (asdf:asdf-version))'
 
     install_quicklisp
-    setup_asdf_source_registry
+    # setup_asdf_source_registry
 )

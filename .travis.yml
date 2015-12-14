@@ -4,7 +4,7 @@ language: lisp
 env:
   matrix:
   - LISP=sbcl
-  - LISP=sbcl32
+  # - LISP=sbcl32
   # - LISP=ccl
   # - LISP=ccl32
   # - LISP=ecl
@@ -18,8 +18,14 @@ matrix:
   - LISP=abcl
 
 before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -qq libc6:i386 default-jre
+- sudo apt-get update
+- curl -L https://raw.github.com/KeenS/CIM/master/scripts/cim_installer | sh
+- CIM_HOME="${HOME}/.cim"
+- export CIM_HOME
+- PATH="$CIM_HOME/bin:$PATH";export PATH
+- CIM_ID="$$";export CIM_ID
+- curl -o "${CIM_HOME}" -L http://beta.quicklisp.org/quicklisp.lisp
+- cl -f quicklisp.lisp -e '(quicklisp-quickstart:install)'
 
 install:
 - curl -L https://raw.githubusercontent.com/wobh/xlisp/xlisp-93-test-travis-install-script/lib/travis/install.sh | sh
