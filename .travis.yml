@@ -11,6 +11,10 @@ env:
 - LISP=clisp
 - LISP=clisp32
 
+before_install:
+- dpkg --add-architecture i386
+- sudo apt-get update -qq
+
 install:
 - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
 
