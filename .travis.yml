@@ -2,20 +2,14 @@
 language: lisp
 
 env:
-  matrix:
-  - LISP=sbcl
-  - LISP=sbcl32
-  - LISP=ccl
-  - LISP=ccl32
-  - LISP=ecl
-  - LISP=clisp
-  - LISP=clisp32
-  # - LISP=allegro
-  # - LISP=cmucl
-
-matrix:
-  allow_failures:
-  - LISP=abcl
+- LISP=sbcl
+- LISP=sbcl32
+- LISP=ccl
+- LISP=ccl32
+- LISP=ecl
+- LISP=abcl
+- LISP=clisp
+- LISP=clisp32
 
 install:
 - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
