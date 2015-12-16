@@ -12,24 +12,13 @@ env:
   # - LISP=clisp32
   # - LISP=allegro
   # - LISP=cmucl
-
-matrix:
-  allow_failures:
-  - LISP=abcl
+  # - LISP=abcl
 
 before_install:
 - sudo apt-get update
-- curl -L https://raw.github.com/KeenS/CIM/master/scripts/cim_installer | sh
-- CIM_HOME="${HOME}/.cim"
-- export CIM_HOME
-- PATH="$CIM_HOME/bin:$PATH";export PATH
-- CIM_ID="$$";export CIM_ID
-- curl -o "${CIM_HOME}" -L http://beta.quicklisp.org/quicklisp.lisp
-- cl -f quicklisp.lisp -e '(quicklisp-quickstart:install)'
 
 install:
 - curl -L https://raw.githubusercontent.com/wobh/xlisp/xlisp-93-test-travis-install-script/lib/travis/install.sh | sh
-#- curl -L https://github.com/exercism/xlisp/lib/travis/raw/master/install.sh | sh
 
 script:
 - bin/fetch-configlet
