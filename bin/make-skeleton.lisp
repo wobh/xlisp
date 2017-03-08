@@ -9,12 +9,10 @@
 ;;;; DESCRIPTION:
 ;;;; Generates skeleton for exercism exercise.
 
-(cl:in-package #:cl-user)
-
-(cl:defpackage #:xlisp-bones
+(defpackage #:xlisp-bones
   (:use #:cl))
 
-(cl:in-package #:xlisp-bones)
+(in-package #:xlisp-bones)
 
 (defconstant +usage+ "make-skeleton EXERCISM"
   "Usage string.")
@@ -30,7 +28,7 @@
 
 (defun make-in-pkg (name)
   "Given name (STRING), create IN-PACKAGE definition."
-  (list 'cl:in-package (make-symbol name)))
+  (list 'in-package (make-symbol name)))
 
 (defun make-bones-pkg (name
                        &options keys
@@ -40,7 +38,7 @@
   "Given name (STRING) and DEFPACKAGE keys create bones head."
   (let ((bones (list
                 (make-in-pkg "CL-USER")
-                (list 'cl:defpackage (make-symbol name)))))
+                (list 'defpackage (make-symbol name)))))
     (loop
       for (key . val) in keys
       do
@@ -79,7 +77,7 @@
   "Print definition list."
   (let ((*package* (find-package '#:keyword))
         (*read-eval* nil)
-        (custom:*print-symbol-package-prefix-shortest* t)
+        ; (custom:*print-symbol-package-prefix-shortest* t)
         (*print-readably* nil)
         (*print-escape* t)
         (*print-gensym* t)
