@@ -9,6 +9,9 @@
 (define-test hello-world-test
   (assert-equal "Hello, World!" (hw:hello-world)))
 
+(define-test hello-world-fail
+  (assert-true nil))
+
 #-xlisp-test
 (let ((*print-errors* t)
       (*print-failures* t))
